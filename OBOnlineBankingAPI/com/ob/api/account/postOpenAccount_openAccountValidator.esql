@@ -7,58 +7,66 @@ CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.openAccRequest;
 		SET Environment.Variables.InputMsg = inRef;
 		SET Environment.Variables.Properties = InputRoot.Properties;
+		SET Environment.Variables.APIDetails.appName = ApplicationLabel;
+		SET Environment.Variables.APIDetails.msgFlowName = MessageFlowLabel;
+		SET Environment.Variables.APIDetails.oparationName = 'openAccount';
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE envRefMsg REFERENCE TO Environment.Variables.InputMsg;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
-		
+		SET envRef.logMsg = 'Flow execution started..!!';
+		PROPAGATE TO TERMINAL 'out1';
 		-- Intitial field validation
 		-- If fields are empty or null then throw an exception
-		IF FIELDVALUE(inRef.customerName)='' OR FIELDVALUE(inRef.customerName) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerName)='' OR FIELDVALUE(envRefMsg.customerName) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerName,';
 		END IF;
-		IF FIELDVALUE(inRef.customerDOB)='' OR FIELDVALUE(inRef.customerDOB) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerDOB)='' OR FIELDVALUE(envRefMsg.customerDOB) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerDOB,';
 		END IF;
-		IF FIELDVALUE(inRef.customerFatherName)='' OR FIELDVALUE(inRef.customerFatherName) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerFatherName)='' OR FIELDVALUE(envRefMsg.customerFatherName) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerFatherName,';
 		END IF;
-		IF FIELDVALUE(inRef.customerMobile)='' OR FIELDVALUE(inRef.customerMobile) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerMobile)='' OR FIELDVALUE(envRefMsg.customerMobile) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerMobile,';
 		END IF;
-		IF FIELDVALUE(inRef.customerNationalID)='' OR FIELDVALUE(inRef.customerNationalID) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerNationalID)='' OR FIELDVALUE(envRefMsg.customerNationalID) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerNationalID,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.houseNo)='' OR FIELDVALUE(inRef.customerAddress.houseNo) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.houseNo)='' OR FIELDVALUE(envRefMsg.customerAddress.houseNo) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'houseNo,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.landmark)='' OR FIELDVALUE(inRef.customerAddress.landmark) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.landmark)='' OR FIELDVALUE(envRefMsg.customerAddress.landmark) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'landmark,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.city)='' OR FIELDVALUE(inRef.customerAddress.city) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.city)='' OR FIELDVALUE(envRefMsg.customerAddress.city) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'city,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.state)='' OR FIELDVALUE(inRef.customerAddress.state) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.state)='' OR FIELDVALUE(envRefMsg.customerAddress.state) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'state,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.country)='' OR FIELDVALUE(inRef.customerAddress.country) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.country)='' OR FIELDVALUE(envRefMsg.customerAddress.country) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'country,';
 		END IF;
-		IF FIELDVALUE(inRef.customerAddress.pin)='' OR FIELDVALUE(inRef.customerAddress.pin) IS NULL THEN
+		IF FIELDVALUE(envRefMsg.customerAddress.pin)='' OR FIELDVALUE(envRefMsg.customerAddress.pin) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'pin,';
 		END IF;
 		
 		IF FieldFlag = TRUE THEN
 			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			SET envRef.logMsg = 'Mandatory field value missing for '||MandFldCheckMsg;
+			PROPAGATE TO TERMINAL 'out1';
 			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
 		END IF;
 		RETURN TRUE;
