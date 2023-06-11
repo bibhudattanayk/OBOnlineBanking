@@ -6,6 +6,7 @@ CREATE COMPUTE MODULE getVerifyAccount_verifyAccountValidator
 	BEGIN
 		DECLARE inLERef REFERENCE TO InputLocalEnvironment.REST.Input.Parameters;
 		SET Environment.Variables.InputParameter = inLERef;
+		SET Environment.Variables.Properties = InputRoot.Properties;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
 		
@@ -22,8 +23,6 @@ CREATE COMPUTE MODULE getVerifyAccount_verifyAccountValidator
 		IF FieldFlag = TRUE THEN
 			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
 			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
-		ELSE
-			SET OutputRoot = InputRoot;
 		END IF;
 		RETURN TRUE;
 	END;

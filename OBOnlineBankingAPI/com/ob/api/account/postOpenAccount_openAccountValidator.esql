@@ -6,6 +6,7 @@ CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 	BEGIN
 		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.openAccRequest;
 		SET Environment.Variables.InputMsg = inRef;
+		SET Environment.Variables.Properties = InputRoot.Properties;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
 		
@@ -59,8 +60,6 @@ CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 		IF FieldFlag = TRUE THEN
 			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
 			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
-		ELSE
-			SET OutputRoot = InputRoot;
 		END IF;
 		RETURN TRUE;
 	END;

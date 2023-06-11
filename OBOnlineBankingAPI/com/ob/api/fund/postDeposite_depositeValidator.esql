@@ -6,6 +6,7 @@ CREATE COMPUTE MODULE postDeposite_depositeValidator
 	BEGIN
 		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.depositRequest;
 		SET Environment.Variables.InputMsg = inRef;
+		SET Environment.Variables.Properties = InputRoot.Properties;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
 		
