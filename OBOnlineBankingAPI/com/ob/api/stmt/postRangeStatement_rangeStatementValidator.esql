@@ -1,0 +1,38 @@
+BROKER SCHEMA com.ob.api.stmt
+
+
+CREATE COMPUTE MODULE postRangeStatement_rangeStatementValidator
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.statementRequest;
+		SET Environment.Variables.InputMsg = inRef;
+		DECLARE FieldFlag BOOLEAN FALSE;
+		DECLARE MandFldCheckMsg CHARACTER '';
+		
+		-- Intitial field validation
+		-- If fields are empty or null then throw an exception
+		IF FIELDVALUE(inRef.customerID)='' OR FIELDVALUE(inRef.customerID) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerID,';
+		END IF;
+		IF FIELDVALUE(inRef.customerMPin)='' OR FIELDVALUE(inRef.customerMPin) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerMPin,';
+		END IF;
+		IF FIELDVALUE(inRef.startDate)='' OR FIELDVALUE(inRef.startDate) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'startDate,';
+		END IF;
+		IF FIELDVALUE(inRef.endDate)='' OR FIELDVALUE(inRef.endDate) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'endDate,';
+		END IF;
+		IF FieldFlag = TRUE THEN
+			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
+		ELSE
+			SET OutputRoot = InputRoot;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

@@ -1,0 +1,38 @@
+BROKER SCHEMA com.ob.api.fund
+
+
+CREATE COMPUTE MODULE postWithdraw_withdrawValidator
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.withdrawRequest;
+		SET Environment.Variables.InputMsg = inRef;
+		DECLARE FieldFlag BOOLEAN FALSE;
+		DECLARE MandFldCheckMsg CHARACTER '';
+		
+		-- Intitial field validation
+		-- If fields are empty or null then throw an exception
+		IF FIELDVALUE(inRef.accountNo)='' OR FIELDVALUE(inRef.accountNo) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'accountNo,';
+		END IF;
+		IF FIELDVALUE(inRef.acHolderName)='' OR FIELDVALUE(inRef.acHolderName) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'acHolderName,';
+		END IF;
+		IF FIELDVALUE(inRef.branchCode)='' OR FIELDVALUE(inRef.branchCode) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'branchCode,';
+		END IF;
+		IF CAST(FIELDVALUE(inRef.amount) AS INTEGER) <= 0 OR FIELDVALUE(inRef.amount) IS NULL OR FIELDVALUE(inRef.amount)='' THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'amount,';
+		END IF;
+		IF FieldFlag = TRUE THEN
+			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
+		ELSE
+			SET OutputRoot = InputRoot;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

@@ -1,0 +1,1542 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OnlineBankingAPI",
+    "version": "1.0.0",
+    "description": "Online Banking API for Banking Operations"
+  },
+  "paths": {
+    "/account/openAccount": {
+      "post": {
+        "operationId": "postOpenAccount",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/openAccountResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Insert Customer Information into Bank Database for Open Account",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/openAccountRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/account/verifyAccount": {
+      "get": {
+        "operationId": "getVerifyAccount",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/verifyAccountResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "description": "Verify Account",
+        "parameters": [
+          {
+            "name": "customerID",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "customerMPin",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/account/updateAccount": {
+      "put": {
+        "operationId": "putUpdateAccount",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/updateAccountResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Update Account Details",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/updateAccountRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/account/getAccountInfo": {
+      "get": {
+        "operationId": "getGetAccountInfo",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/getAccountInfoResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fetch Account Information",
+        "parameters": [
+          {
+            "name": "customerID",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "customerMPin",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/account/deactivateAccount": {
+      "delete": {
+        "operationId": "deleteDeactivateAccount",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/deactivateAccountResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "description": "Remove Account from Bank Database",
+        "parameters": [
+          {
+            "name": "customerID",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "customerMPin",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/fund/deposite": {
+      "post": {
+        "operationId": "postDeposite",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/depositFundResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fund Deposite",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/depositFundRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/fund/withdraw": {
+      "post": {
+        "operationId": "postWithdraw",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/withdrawFundResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fund Withdraw",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/withdrawFundRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/fund/transfer": {
+      "post": {
+        "operationId": "postTransfer",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/transferFundResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fund Transfer",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/transferFundRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/statement/miniStatement": {
+      "get": {
+        "operationId": "getMiniStatement",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/miniStatementResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fetch Mini Statement",
+        "parameters": [
+          {
+            "name": "customerID",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "customerMPin",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/statement/rangeStatement": {
+      "post": {
+        "operationId": "postRangeStatement",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/rangeStatementResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Fetch Bank Statement for a Specified Date Range",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/rangeStatementRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/account/accountValidator": {
+      "post": {
+        "operationId": "postAccountValidator",
+        "responses": {
+          "200": {
+            "description": "The operation was successful.",
+            "schema": {
+              "$ref": "#/definitions/accountValidatorResponse"
+            }
+          }
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Check the specified account is available or not.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/accountValidatorRequest"
+            },
+            "description": "The request body for the operation",
+            "required": true
+          }
+        ]
+      }
+    }
+  },
+  "basePath": "/ownbank/onlinebankingapi/v1",
+  "definitions": {
+    "openAccountRequest": {
+      "type": "object",
+      "properties": {
+        "openAccRequest": {
+          "type": "object",
+          "properties": {
+            "customerName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "customerDOB": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": "12/12/2000"
+            },
+            "customerFatherName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Mike David"
+            },
+            "customerMobile": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": 8791654733
+            },
+            "customerEmailID": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 60,
+              "example": "smithdavid@gmail.com"
+            },
+            "customerNationalID": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 16,
+              "example": "N123FG456752"
+            },
+            "customerAddress": {
+              "type": "object",
+              "properties": {
+                "houseNo": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "7-21-A/22"
+                },
+                "street": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Sardhar Lane"
+                },
+                "landmark": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Jagannath Temple"
+                },
+                "city": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Cuttack"
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Odisha"
+                },
+                "country": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "India"
+                },
+                "pin": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": 751046
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "openAccountResponse": {
+      "type": "object",
+      "properties": {
+        "openAccResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Your A/c opening request has been submitted, Please check your A/c status with given details."
+                }
+              }
+            },
+            "customerResponse": {
+              "type": "object",
+              "properties": {
+                "customerID": {
+                  "type": "string",
+                  "minLength": 9,
+                  "maxLength": 10,
+                  "example": 1234567810
+                },
+                "customerName": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Smith David"
+                },
+                "accOpenRefNo": {
+                  "type": "string",
+                  "minLength": 20,
+                  "maxLength": 20,
+                  "example": "AO4646486435154"
+                },
+                "accOpeningStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 10,
+                  "example": "Inactive"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "verifyAccountResponse": {
+      "type": "object",
+      "properties": {
+        "verifyAccResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your Verify Account Details"
+                }
+              }
+            },
+            "customerResponse": {
+              "type": "object",
+              "properties": {
+                "customerID": {
+                  "type": "string",
+                  "minLength": 9,
+                  "maxLength": 10,
+                  "example": 1234567810
+                },
+                "customerName": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Smith David"
+                },
+                "customerAccNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 16,
+                  "example": "2254885565"
+                },
+                "accStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 10,
+                  "example": "Inactive"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "updateAccRequest": {
+          "type": "object",
+          "properties": {
+            "customerID": {
+              "type": "string",
+              "minLength": 9,
+              "maxLength": 10,
+              "example": 1234567810
+            },
+            "customerMPin": {
+              "type": "string",
+              "minLength": 6,
+              "maxLength": 8,
+              "example": "dfkerf"
+            },
+            "customerName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "customerDOB": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": "12/12/2000"
+            },
+            "customerFatherName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Mike David"
+            },
+            "customerMobile": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": 8791654733
+            },
+            "customerEmailID": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 60,
+              "example": "smithdavid@gmail.com"
+            },
+            "customerNationalID": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 16,
+              "example": "N123FG456752"
+            },
+            "customerAddress": {
+              "type": "object",
+              "properties": {
+                "houseNo": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "7-21-A/22"
+                },
+                "street": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Sardhar Lane"
+                },
+                "landmark": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Jagannath Temple"
+                },
+                "city": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Cuttack"
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Odisha"
+                },
+                "country": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "India"
+                },
+                "pin": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": 751046
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateAccountResponse": {
+      "type": "object",
+      "properties": {
+        "updateAccResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your update A/c Details"
+                }
+              }
+            },
+            "custResponse": {
+              "type": "object",
+              "properties": {
+                "customerID": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 12,
+                  "example": 1234567890
+                },
+                "updateStatus": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 200,
+                  "example": "Account details updated successfully."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "getAccountInfoResponse": {
+      "type": "object",
+      "properties": {
+        "getAccInfoResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your Accoun information"
+                }
+              }
+            },
+            "custResponse": {
+              "type": "object",
+              "properties": {
+                "customerID": {
+                  "type": "string",
+                  "minLength": 9,
+                  "maxLength": 10,
+                  "example": 1234567810
+                },
+                "customerName": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Smith David"
+                },
+                "customerDOB": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 10,
+                  "example": "12/12/2000"
+                },
+                "customerFatherName": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Mike David"
+                },
+                "customerMobile": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 10,
+                  "example": 8791654733
+                },
+                "customerEmailID": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 60,
+                  "example": "smithdavid@gmail.com"
+                },
+                "customerNationalID": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 16,
+                  "example": "N123FG456752"
+                },
+                "customerAddress": {
+                  "type": "object",
+                  "properties": {
+                    "houseNo": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "7-21-A/22"
+                    },
+                    "street": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "Sardhar Lane"
+                    },
+                    "landmark": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "Jagannath Temple"
+                    },
+                    "city": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "Cuttack"
+                    },
+                    "state": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "Odisha"
+                    },
+                    "country": {
+                      "type": "string",
+                      "minLength": 5,
+                      "maxLength": 25,
+                      "example": "India"
+                    },
+                    "pin": {
+                      "type": "string",
+                      "minLength": 6,
+                      "maxLength": 6,
+                      "example": 751046
+                    }
+                  }
+                },
+                "customerAccountDetails": {
+                  "type": "object",
+                  "properties": {
+                    "accType": {
+                      "type": "string",
+                      "minLength": 14,
+                      "maxLength": 16,
+                      "example": "saving"
+                    },
+                    "accNo": {
+                      "type": "string",
+                      "minLength": 14,
+                      "maxLength": 16,
+                      "example": "2254885565"
+                    },
+                    "accBalance": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 999999999999999,
+                      "example": 5000
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deactivateAccountResponse": {
+      "type": "object",
+      "properties": {
+        "deactivateAccResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your deactive status"
+                }
+              }
+            },
+            "custResponse": {
+              "type": "object",
+              "properties": {
+                "customerID": {
+                  "type": "string",
+                  "minLength": 9,
+                  "maxLength": 10,
+                  "example": 1234567810
+                },
+                "customerName": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 25,
+                  "example": "Smith David"
+                },
+                "accDeleteStatus": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 200,
+                  "example": "Account deleted successfully."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "depositFundRequest": {
+      "type": "object",
+      "properties": {
+        "depositRequest": {
+          "type": "object",
+          "properties": {
+            "accountNo": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 16,
+              "example": "2254885565"
+            },
+            "acHolderName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "branchCode": {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 6,
+              "example": "0112"
+            },
+            "amount": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "example": 5000
+            }
+          },
+          "required": [
+            "accountNo",
+            "acHolderName",
+            "branchCode",
+            "amount"
+          ]
+        }
+      }
+    },
+    "depositFundResponse": {
+      "type": "object",
+      "properties": {
+        "depositeResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your diposit request"
+                }
+              }
+            },
+            "fundResponse": {
+              "type": "object",
+              "properties": {
+                "accountNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 16,
+                  "example": "2254885565"
+                },
+                "depositeAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 500000,
+                  "example": 5000
+                },
+                "updatedAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 999999999999999,
+                  "example": 5000
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "withdrawFundRequest": {
+      "type": "object",
+      "properties": {
+        "withdrawRequest": {
+          "type": "object",
+          "properties": {
+            "accountNo": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 16,
+              "example": "2254885565"
+            },
+            "acHolderName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "branchCode": {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 6,
+              "example": 112
+            },
+            "amount": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500000,
+              "example": 5000
+            }
+          },
+          "required": [
+            "accountNo",
+            "acHolderName",
+            "branchCode",
+            "amount"
+          ]
+        }
+      }
+    },
+    "withdrawFundResponse": {
+      "type": "object",
+      "properties": {
+        "withdrawResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your withdraw request"
+                }
+              }
+            },
+            "fundResponse": {
+              "type": "object",
+              "properties": {
+                "tnxReferenceNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 20,
+                  "example": "Ref1234567890"
+                },
+                "accountNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 16,
+                  "example": "2254885565"
+                },
+                "withdrawAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 500000,
+                  "example": 5000
+                },
+                "remainingAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 999999999999999,
+                  "example": 5000
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "transferFundRequest": {
+      "type": "object",
+      "properties": {
+        "transferRequest": {
+          "type": "object",
+          "properties": {
+            "beneficialAccountNo": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 16,
+              "example": "2254885565"
+            },
+            "beneficialAcHolderName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "beneficialIFSCCode": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 10,
+              "example": "OBPL00112"
+            },
+            "remitterAccountNo": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 16,
+              "example": "2254885565"
+            },
+            "remitterAcHolderName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "remitterIFSCCode": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 10,
+              "example": "OBPL000112"
+            },
+            "amount": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500000,
+              "example": 5000
+            }
+          },
+          "required": [
+            "beneficialAccountNo",
+            "beneficialAcHolderName",
+            "beneficialIFSCCode",
+            "remitterAccountNo",
+            "remitterAcHolderName",
+            "remitterIFSCCode",
+            "amount"
+          ]
+        }
+      }
+    },
+    "transferFundResponse": {
+      "type": "object",
+      "properties": {
+        "transferResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your fund transfer request"
+                }
+              }
+            },
+            "fundResponse": {
+              "type": "object",
+              "properties": {
+                "tnxReferenceNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 20,
+                  "example": "Ref1234567890"
+                },
+                "remitterAccountNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 16,
+                  "example": "2254885565"
+                },
+                "transferAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 500000,
+                  "example": 5000
+                },
+                "remainingAmount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 999999999999999,
+                  "example": 5000
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "miniStatementResponse": {
+      "type": "object",
+      "properties": {
+        "statementResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check you Mini Statement"
+                }
+              }
+            },
+            "miniStmtResponse": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "accountNo": {
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 16,
+                    "example": "2254885565"
+                  },
+                  "tnxReferenceNo": {
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 20,
+                    "example": "Ref1234567890"
+                  },
+                  "tnxMessage": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100,
+                    "example": "ac 23923498502 to 92482039840"
+                  },
+                  "tnxDate": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 10,
+                    "example": "12/10/2022"
+                  },
+                  "tnxType": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 7,
+                    "example": "credit"
+                  },
+                  "tnxAmount": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 999999999999999,
+                    "example": 5000
+                  },
+                  "accBalance": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 999999999999999,
+                    "example": 5000
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "rangeStatementRequest": {
+      "type": "object",
+      "properties": {
+        "statementRequest": {
+          "type": "object",
+          "properties": {
+            "customerID": {
+              "type": "string",
+              "minLength": 9,
+              "maxLength": 10,
+              "example": 1234567810
+            },
+            "customerMPin": {
+              "type": "string",
+              "minLength": 6,
+              "maxLength": 8,
+              "example": "dfkerf"
+            },
+            "startDate": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": "12/12/2000"
+            },
+            "endDate": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "example": "12/12/2000"
+            }
+          },
+          "required": [
+            "customerID",
+            "customerMPin",
+            "startDate",
+            "endDate"
+          ]
+        }
+      }
+    },
+    "rangeStatementResponse": {
+      "type": "object",
+      "properties": {
+        "statementResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check you Bank Statement"
+                }
+              }
+            },
+            "rangeStmtResponse": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "accountNo": {
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 16,
+                    "example": "2254885565"
+                  },
+                  "tnxReferenceNo": {
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 20,
+                    "example": "Ref1234567890"
+                  },
+                  "tnxMessage": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100,
+                    "example": "ac 23923498502 to 92482039840"
+                  },
+                  "tnxDate": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 10,
+                    "example": "12/10/2022"
+                  },
+                  "tnxType": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 7,
+                    "example": "credit"
+                  },
+                  "tnxAmount": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 999999999999999,
+                    "example": 5000
+                  },
+                  "accBalance": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 999999999999999,
+                    "example": 5000
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "accountValidatorRequest": {
+      "type": "object",
+      "properties": {
+        "accValidatorRequest": {
+          "type": "object",
+          "properties": {
+            "custAccountNo": {
+              "type": "string",
+              "minLength": 14,
+              "maxLength": 16,
+              "example": "2254885565"
+            },
+            "customerName": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 25,
+              "example": "Smith David"
+            },
+            "customerIFSCCode": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 10,
+              "example": "OBPL00112"
+            }
+          },
+          "required": [
+            "custAccountNo",
+            "customerName",
+            "customerIFSCCode"
+          ]
+        }
+      }
+    },
+    "accountValidatorResponse": {
+      "type": "object",
+      "properties": {
+        "accValidatorResponse": {
+          "type": "object",
+          "properties": {
+            "apiResponse": {
+              "type": "object",
+              "properties": {
+                "respCode": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 6,
+                  "example": "000000"
+                },
+                "respStatus": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 7,
+                  "example": "Success"
+                },
+                "respMessage": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 200,
+                  "example": "Check your fund transfer request"
+                }
+              }
+            },
+            "fundResponse": {
+              "type": "object",
+              "properties": {
+                "customerAccountNo": {
+                  "type": "string",
+                  "minLength": 14,
+                  "maxLength": 16,
+                  "example": "2254885565"
+                },
+                "customerAccountBlnc": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 999999999999999,
+                  "example": 5000
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

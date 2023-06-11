@@ -1,0 +1,50 @@
+BROKER SCHEMA com.ob.api.fund
+
+
+CREATE COMPUTE MODULE postTransfer_transferValidator
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.transferRequest;
+		SET Environment.Variables.InputMsg = inRef;
+		DECLARE FieldFlag BOOLEAN FALSE;
+		DECLARE MandFldCheckMsg CHARACTER '';
+		
+		-- Intitial field validation
+		-- If fields are empty or null then throw an exception
+		IF FIELDVALUE(inRef.beneficialAccountNo)='' OR FIELDVALUE(inRef.beneficialAccountNo) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'beneficialAccountNo,';
+		END IF;
+		IF FIELDVALUE(inRef.beneficialAcHolderName)='' OR FIELDVALUE(inRef.beneficialAcHolderName) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'beneficialAcHolderName,';
+		END IF;
+		IF FIELDVALUE(inRef.beneficialIFSCCode)='' OR FIELDVALUE(inRef.beneficialIFSCCode) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'beneficialIFSCCode,';
+		END IF;
+		IF FIELDVALUE(inRef.remitterAcHolderName)='' OR FIELDVALUE(inRef.remitterAcHolderName) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'remitterAcHolderName,';
+		END IF;
+		IF FIELDVALUE(inRef.remitterAccountNo)='' OR FIELDVALUE(inRef.remitterAccountNo) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'remitterAccountNo,';
+		END IF;
+		IF FIELDVALUE(inRef.remitterIFSCCode)='' OR FIELDVALUE(inRef.remitterIFSCCode) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'remitterIFSCCode,';
+		END IF;
+		IF CAST(FIELDVALUE(inRef.amount) AS INTEGER) <= 0 OR FIELDVALUE(inRef.amount) IS NULL OR FIELDVALUE(inRef.amount)='' THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'amount,';
+		END IF;
+		IF FieldFlag = TRUE THEN
+			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
+		ELSE
+			SET OutputRoot = InputRoot;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

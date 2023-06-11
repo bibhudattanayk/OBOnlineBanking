@@ -1,0 +1,34 @@
+BROKER SCHEMA com.ob.api.account
+
+
+CREATE COMPUTE MODULE postAccountValidator_accountValidator
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.accValidatorRequest;
+		SET Environment.Variables.InputMsg = inRef;
+		DECLARE FieldFlag BOOLEAN FALSE;
+		DECLARE MandFldCheckMsg CHARACTER '';
+		
+		-- Intitial field validation
+		-- If fields are empty or null then throw an exception
+		IF FIELDVALUE(inRef.custAccountNo)='' OR FIELDVALUE(inRef.custAccountNo) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'custAccountNo,';
+		END IF;
+		IF FIELDVALUE(inRef.customerName)='' OR FIELDVALUE(inRef.customerName) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerName,';
+		END IF;
+		IF FIELDVALUE(inRef.customerIFSCCode)='' OR FIELDVALUE(inRef.customerIFSCCode) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerIFSCCode,';
+		END IF;
+		IF FieldFlag = TRUE THEN
+			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
+		ELSE
+			SET OutputRoot = InputRoot;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

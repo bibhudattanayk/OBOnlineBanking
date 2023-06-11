@@ -1,0 +1,30 @@
+BROKER SCHEMA com.ob.api.stmt
+
+
+CREATE COMPUTE MODULE getMiniStatement_miniStatementValidator
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inLERef REFERENCE TO InputLocalEnvironment.REST.Input.Parameters;
+		SET Environment.Variables.InputParameter = inLERef;
+		DECLARE FieldFlag BOOLEAN FALSE;
+		DECLARE MandFldCheckMsg CHARACTER '';
+		
+		-- Intitial field validation
+		-- If fields are empty or null then throw an exception
+		IF FIELDVALUE(inLERef.customerID)='' OR FIELDVALUE(inLERef.customerID) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerID,';
+		END IF;	
+		IF FIELDVALUE(inLERef.customerMPin)='' OR FIELDVALUE(inLERef.customerMPin) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'customerMPin,';
+		END IF;		
+		IF FieldFlag = TRUE THEN
+			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
+		ELSE
+			SET OutputRoot = InputRoot;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;
