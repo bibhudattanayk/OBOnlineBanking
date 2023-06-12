@@ -1,0 +1,46 @@
+BROKER SCHEMA com.ob.util
+
+ CREATE FUNCTION exceptionMessage(IN excMsg CHARACTER, OUT respCode CHARACTER, OUT respStatus CHARACTER, OUT respMessage CHARACTER)
+ BEGIN
+			DECLARE parsing, timeout, whilst, refuse, socket, nullValue, unique, mandatory BOOLEAN FALSE;
+			SET timeout = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'time');
+			SET parsing = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'parsing');
+			SET whilst = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'whilst');
+			SET refuse = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'refuse');
+			SET socket = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'SOCKET');
+			SET nullValue = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'NULL');
+			SET unique = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'unique constraint');
+			SET mandatory = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'Mandatory field value');
+			-----------------------------------statement for mapping error response to channel-----------------------------------------------
+			----CASE------------1----(Inner)------------------------
+			CASE
+			WHEN parsing <> FALSE THEN
+				SET respCode='000901';
+				SET respStatus='Fail';
+				SET respMessage = 'It seems the requested structure of data having some issue, Please check and retry';
+			WHEN timeout <> FALSE THEN
+				SET respCode='000902';
+				SET respStatus='Fail';
+				SET respMessage = 'API taking more time to response.';
+			WHEN whilst <> FALSE OR socket <> FALSE OR socket <> FALSE THEN
+				SET respCode='000903';
+				SET respStatus='Fail';
+				SET respMessage = 'Issue occured while establishing the connection with backend system.';
+			WHEN nullValue <> FALSE THEN
+				SET respCode='000904';
+				SET respStatus='Fail';
+				SET respMessage = 'Backend returing null response.';
+			WHEN unique <> FALSE THEN
+				SET respCode='000905';
+				SET respStatus='Fail';
+				SET respMessage = 'The data you are trying to use, are already available in bank system, Please use your unique information.';
+			WHEN mandatory <> FALSE THEN
+				SET respCode='000906';
+				SET respStatus='Fail';
+				SET respMessage = SUBSTRING(excMsg FROM POSITION( 'Mandatory' IN excMsg) FOR 500);
+			ELSE
+				SET respCode='000999';
+				SET respStatus='Fail';
+				SET respMessage = 'Internal Error Occures..!!!';
+			END CASE;
+END;
