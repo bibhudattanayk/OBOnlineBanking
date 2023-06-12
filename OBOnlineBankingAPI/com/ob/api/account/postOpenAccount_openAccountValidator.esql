@@ -1,6 +1,5 @@
 BROKER SCHEMA com.ob.api.account
 
-
 CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
@@ -37,6 +36,10 @@ CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 		IF FIELDVALUE(envRefMsg.customerNationalID)='' OR FIELDVALUE(envRefMsg.customerNationalID) IS NULL THEN
 			SET FieldFlag = TRUE;
 			SET MandFldCheckMsg = MandFldCheckMsg||'customerNationalID,';
+		END IF;
+		IF FIELDVALUE(envRefMsg.custAccountType)='' OR FIELDVALUE(envRefMsg.custAccountType) IS NULL THEN
+			SET FieldFlag = TRUE;
+			SET MandFldCheckMsg = MandFldCheckMsg||'custAccountType,';
 		END IF;
 		IF FIELDVALUE(envRefMsg.customerAddress.houseNo)='' OR FIELDVALUE(envRefMsg.customerAddress.houseNo) IS NULL THEN
 			SET FieldFlag = TRUE;
