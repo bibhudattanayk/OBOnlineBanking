@@ -9,7 +9,7 @@ BROKER SCHEMA com.ob.util
 			SET refuse = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'refuse');
 			SET socket = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'SOCKET');
 			SET nullValue = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'NULL');
-			SET unique = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'unique constraint');
+			SET unique = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'unique');
 			SET mandatory = CONTAINS(CAST(SUBSTRING(excMsg FROM 1 FOR 250) AS CHARACTER),'Mandatory field value');
 			-----------------------------------statement for mapping error response to channel-----------------------------------------------
 			----CASE------------1----(Inner)------------------------

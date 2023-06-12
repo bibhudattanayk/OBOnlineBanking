@@ -1,5 +1,4 @@
 BROKER SCHEMA com.ob.exception
-PATH com.onlinebank.ob;
 DECLARE exceptionDataShared SHARED CHARACTER;
 DECLARE interShared SHARED CHARACTER;
 CREATE COMPUTE MODULE ExceptionHandlerSF_OBExceptionHandler
