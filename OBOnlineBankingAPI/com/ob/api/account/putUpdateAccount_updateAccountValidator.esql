@@ -1,6 +1,5 @@
 BROKER SCHEMA com.ob.api.account
 
-
 CREATE COMPUTE MODULE putUpdateAccount_updateAccountValidator
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN

@@ -1,0 +1,22 @@
+BROKER SCHEMA com.ob.api.account
+
+CREATE COMPUTE MODULE getVerifyAccount_verifyAccount
+	DECLARE OBDSN, OBSchema, OBTable EXTERNAL CHARACTER '';
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE envMsgRef REFERENCE TO envRef.InputParameter;
+		DECLARE DBQuery CHARACTER;
+		SET DBQuery = 'SELECT * FROM '||OBSchema||'.'||OBTable||' WHERE CUST_ID = ? AND CUST_M_PIN = ?';
+		SET envRef.CustTable.records[] = PASSTHRU(DBQuery TO Database.{OBDSN} VALUES(CAST(envMsgRef.customerID AS INTEGER),envMsgRef.customerMPin));
+		IF EXISTS(envRef.CustTable.records[]) THEN
+			SET envRef.logMsg = 'Invalid CustomerID or CustomerMPin...!!!';
+			PROPAGATE TO TERMINAL 'out1';
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14005 VALUES('Invalid CustomerID or CustomerMPin');
+		ELSE
+			SET envRef.logMsg = 'Data inserted successfully..!!';
+			PROPAGATE TO TERMINAL 'out1';		
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

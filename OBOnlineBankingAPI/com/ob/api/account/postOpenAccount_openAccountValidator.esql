@@ -3,14 +3,15 @@ BROKER SCHEMA com.ob.api.account
 CREATE COMPUTE MODULE postOpenAccount_openAccountValidator
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
-		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.openAccRequest;
-		SET Environment.Variables.InputMsg = inRef;
-		SET Environment.Variables.Properties = InputRoot.Properties;
-		SET Environment.Variables.APIDetails.appName = ApplicationLabel;
-		SET Environment.Variables.APIDetails.msgFlowName = MessageFlowLabel;
-		SET Environment.Variables.APIDetails.oparationName = 'openAccount';
+		CREATE FIELD Environment.Variables;
 		DECLARE envRef REFERENCE TO Environment.Variables;
-		DECLARE envRefMsg REFERENCE TO Environment.Variables.InputMsg;
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.openAccRequest;
+		SET envRef.InputMsg = inRef;
+		SET envRef.Properties = InputRoot.Properties;
+		SET envRef.APIDetails.appName = ApplicationLabel;
+		SET envRef.APIDetails.msgFlowName = MessageFlowLabel;
+		SET envRef.APIDetails.oparationName = 'openAccount';
+		DECLARE envRefMsg REFERENCE TO envRef.InputMsg;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
 		SET envRef.logMsg = 'Flow execution started..!!';

@@ -1,0 +1,40 @@
+
+
+BROKER SCHEMA com.ob.api.fund
+
+
+CREATE COMPUTE MODULE postTransfer_fundTransferOperation
+	DECLARE OBDSN, OBSchema, OBTable,OBTableA EXTERNAL CHARACTER '';
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.transferRequest;
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE creditQuery,debitQuery CHARACTER;
+		DECLARE remaining_balnc INTEGER;
+		SET creditQuery = 'SELECT * FROM '||OBSchema||'.'||OBTable||' WHERE CUST_NAME = ? AND CUST_ACC_N0 = ? AND CUST_IFSC_CD = ?';
+		SET envRef.fundTab1.records[] = PASSTHRU(creditQuery TO Database.{OBDSN} VALUES(inRef.beneficialAcHolderName,inRef.beneficialAccountNo,inRef.beneficialIFSCCode));
+		SET debitQuery = 'SELECT * FROM '||OBSchema||'.'||OBTable||' WHERE CUST_NAME = ? AND CUST_ACC_N0 = ? AND CUST_IFSC_CD = ?';
+		SET envRef.fundTab2.records[] = PASSTHRU(debitQuery TO Database.{OBDSN} VALUES(inRef.remitterAcHolderName,inRef.remitterAccountNo,inRef.remitterIFSCCode));
+
+		IF EXISTS(envRef.fundTab1.records[]) AND EXISTS(envRef.fundTab2.records[]) THEN
+			DECLARE tnxRefNoPattern CHARACTER 'yyyyMMddHHmmssSSS';
+			SET remaining_balnc = CAST(envRef.fundTab1.records.CUST_ACC_BALANCE - inRef.amount AS INTEGER);
+			SET envRef.tnxRefNo = 'Tnx'||CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT tnxRefNoPattern);
+			
+			INSERT INTO Database.{OBDSN}.{OBSchema}.{OBTableA}(ACC_NO,IFSC_CODE,CUST_NAME,TRANS_DATE,TRANSACTION_ID,TRANSFER_TYPE,TRANSFER_AMOUNT,REMAINING_AMOUNT,TRANS_STATUS)
+			VALUES (inRef.beneficialAccountNo,inRef.beneficialIFSCCode,inRef.beneficialAcHolderName,CURRENT_TIMESTAMP,envRef.tnxRefNo,'Credit',inRef.amount,(envRef.fundTab1.records.CUST_ACC_BALANCE + inRef.amount),'Successful');
+			
+			INSERT INTO Database.{OBDSN}.{OBSchema}.{OBTableA}(ACC_NO,IFSC_CODE,CUST_NAME,TRANS_DATE,TRANSACTION_ID,TRANSFER_TYPE,TRANSFER_AMOUNT,REMAINING_AMOUNT,TRANS_STATUS)
+			VALUES (inRef.remitterAccountNo,inRef.remitterIFSCCode,inRef.remitterAcHolderName,CURRENT_TIMESTAMP,envRef.tnxRefNo,'Debit',inRef.amount,remaining_balnc,'Successful');
+			
+			SET Environment.Variables.remaining_balnc = remaining_balnc;
+			SET envRef.logMsg = 'Data inserted successfully..!!';
+			PROPAGATE TO TERMINAL 'out1';
+		ELSE
+			SET envRef.logMsg = 'Recrod not found in System for given records (Customer Name:'||FIELDVALUE(inRef.beneficialAcHolderName)||',Account No:'||FIELDVALUE(inRef.beneficialAccountNo)||')';
+			PROPAGATE TO TERMINAL 'out1';
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14003 VALUES('record Not Found') ;
+		END IF;
+		RETURN TRUE;
+		END;
+	END MODULE;

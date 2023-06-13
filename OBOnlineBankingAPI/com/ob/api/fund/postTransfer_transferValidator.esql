@@ -7,8 +7,15 @@ CREATE COMPUTE MODULE postTransfer_transferValidator
 		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.transferRequest;
 		SET Environment.Variables.InputMsg = inRef;
 		SET Environment.Variables.Properties = InputRoot.Properties;
+		SET Environment.Variables.APIDetails.appName = ApplicationLabel;
+		SET Environment.Variables.APIDetails.msgFlowName = MessageFlowLabel;
+		SET Environment.Variables.APIDetails.oparationName = 'fundTransfer';
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE envRefMsg REFERENCE TO Environment.Variables.InputMsg;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
+		SET envRef.logMsg = 'Flow execution started..!!';
+		PROPAGATE TO TERMINAL 'out1';
 		
 		-- Intitial field validation
 		-- If fields are empty or null then throw an exception
@@ -42,6 +49,8 @@ CREATE COMPUTE MODULE postTransfer_transferValidator
 		END IF;
 		IF FieldFlag = TRUE THEN
 			SET MandFldCheckMsg = TRIM(TRAILING ',' FROM MandFldCheckMsg);
+			SET envRef.logMsg = 'Mandatory field value missing for '||MandFldCheckMsg;
+			PROPAGATE TO TERMINAL 'out1';
 			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14000 VALUES('Mandatory field value missing for '||MandFldCheckMsg||'. Please try again with valid information.') ;
 		ELSE
 			SET OutputRoot = InputRoot;
