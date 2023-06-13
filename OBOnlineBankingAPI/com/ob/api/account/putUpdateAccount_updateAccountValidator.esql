@@ -1,11 +1,11 @@
 BROKER SCHEMA com.ob.api.account
 
-
 CREATE COMPUTE MODULE putUpdateAccount_updateAccountValidator
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.updateAccRequest;
 		SET Environment.Variables.InputMsg = inRef;
+		SET Environment.Variables.Properties = InputRoot.Properties;
 		DECLARE FieldFlag BOOLEAN FALSE;
 		DECLARE MandFldCheckMsg CHARACTER '';
 		

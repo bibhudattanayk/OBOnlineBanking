@@ -1,0 +1,50 @@
+BROKER SCHEMA com.ob.util
+
+CREATE FUNCTION fetchIFSC(IN state CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE ifscCode CHARACTER;
+	DECLARE indianState CHARACTER;
+	SET indianState = state;
+	SET ifscCode =
+	CASE indianState
+		WHEN 'Andhra Pradesh' THEN 'OBPL001101'
+		WHEN 'Arunachal Pradesh' THEN 'OBPL001102'
+		WHEN 'Assam' THEN 'OBPL001103'
+		WHEN 'Bihar' THEN 'OBPL001104'
+		WHEN 'Chhattisgarh' THEN 'OBPL001105'
+		WHEN 'Goa' THEN 'OBPL001106'
+		WHEN 'Gujarat' THEN 'OBPL001107'
+		WHEN 'Haryana' THEN 'OBPL001108'
+		WHEN 'Himachal Pradesh' THEN 'OBPL001109'
+		WHEN 'Jharkhand' THEN 'OBPL001110'
+		WHEN 'Karnataka' THEN 'OBPL001111'
+		WHEN 'Kerala' THEN 'OBPL001112'
+		WHEN 'Madhya Pradesh' THEN 'OBPL001113'
+		WHEN 'Maharashtra' THEN 'OBPL001114'
+		WHEN 'Manipur' THEN 'OBPL001115'
+		WHEN 'Meghalaya' THEN 'OBPL001116'
+		WHEN 'Mizoram' THEN 'OBPL001117'
+		WHEN 'Nagaland' THEN 'OBPL001118'
+		WHEN 'Odisha' THEN 'OBPL001119'
+		WHEN 'Punjab' THEN 'OBPL001120'
+		WHEN 'Rajasthan' THEN 'OBPL001121'
+		WHEN 'Sikkim' THEN 'OBPL001122'
+		WHEN 'Tamil Nadu' THEN 'OBPL001123'
+		WHEN 'Telangana' THEN 'OBPL001124'
+		WHEN 'Tripura' THEN 'OBPL001125'
+		WHEN 'Uttarakhand' THEN 'OBPL001126'
+		WHEN 'Uttar Pradesh' THEN 'OBPL001127'
+		WHEN 'West Bengal' THEN 'OBPL001128'
+		WHEN 'Andaman and Nicobar Islands' THEN 'OBPL001129'
+		WHEN 'Dadra and Nagar Haveli' THEN 'OBPL001130'
+		WHEN 'Daman & Diu' THEN 'OBPL001131'
+		WHEN 'Chandigarh' THEN 'OBPL001132'
+		WHEN 'Delhi' THEN 'OBPL001133'
+		WHEN 'Jammu & Kashmir' THEN 'OBPL001134'
+		WHEN 'Ladakh' THEN 'OBPL001135'
+		WHEN 'Lakshadweep' THEN 'OBPL001136'
+		WHEN 'Puducherry' THEN 'OBPL001137'
+		ELSE 'NO Branch Available'
+	END;
+	RETURN ifscCode;
+END;

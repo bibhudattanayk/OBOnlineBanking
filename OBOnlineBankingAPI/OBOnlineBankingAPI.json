@@ -392,6 +392,12 @@
               "maxLength": 16,
               "example": "N123FG456752"
             },
+            "custAccountType": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 10,
+              "example": "saving"
+            },
             "customerAddress": {
               "type": "object",
               "properties": {
@@ -475,12 +481,6 @@
             "customerResponse": {
               "type": "object",
               "properties": {
-                "customerID": {
-                  "type": "string",
-                  "minLength": 9,
-                  "maxLength": 10,
-                  "example": 1234567810
-                },
                 "customerName": {
                   "type": "string",
                   "minLength": 5,
@@ -489,7 +489,7 @@
                 },
                 "accOpenRefNo": {
                   "type": "string",
-                  "minLength": 20,
+                  "minLength": 16,
                   "maxLength": 20,
                   "example": "AO4646486435154"
                 },

@@ -1,0 +1,46 @@
+BROKER SCHEMA com.ob.api.account
+PATH com.ob.util;
+
+CREATE COMPUTE MODULE postOpenAccount_openAccountResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CREATE FIELD OutputRoot.JSON.Data;
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE outRef REFERENCE TO OutputRoot.JSON.Data;
+		CREATE FIRSTCHILD OF outRef NAME 'openAccResponse';
+		CREATE LASTCHILD OF outRef.openAccResponse NAME 'apiResponse';
+		CREATE LASTCHILD OF outRef.openAccResponse NAME 'customerResponse';
+		DECLARE outApiRef REFERENCE TO outRef.openAccResponse.apiResponse;
+		DECLARE outCustRef REFERENCE TO outRef.openAccResponse.customerResponse;
+		IF FIELDNAME(InputExceptionList.[1])='RecoverableException' THEN
+			DECLARE excpMsg, respCode, respStatus, respMessage CHARACTER;
+			SET excpMsg = envRef.TraceFileExc.exceptionDesc;
+			CALL exceptionMessage(excpMsg,respCode,respStatus,respMessage);
+			SET outApiRef.respCode = respCode;
+			SET outApiRef.respStatus = respStatus;
+			SET outApiRef.respMessage = respMessage;
+			SET outCustRef.accountRefNo = '';
+			SET outCustRef.customerName = '';
+			SET outCustRef.accOpeningStatus = '';
+			ROLLBACK;
+			SET envRef.logMsg = 'Flow execution completed with Fail.(failure Message: '||respMessage||')';
+			PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+		ELSE
+			DECLARE SCODE INTEGER 200;
+			SET OutputRoot.Properties = Environment.Variables.Properties;
+			SET OutputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = SCODE;
+			SET outApiRef.respCode = '000000';
+			SET outApiRef.respStatus = 'Success';
+			SET outApiRef.respMessage = 'Your A/c opening request has been submitted, Please check your A/c status with given details.';
+			SET outCustRef.accountRefNo = Environment.Variables.accRefNo;
+			SET outCustRef.customerName = Environment.Variables.InputMsg.customerName;
+			SET outCustRef.accOpeningStatus = 'INACTIVE';
+			COMMIT;
+			SET envRef.logMsg = 'Flow execution successfully completed..!!';
+			PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+		END IF;
+		DELETE FIELD Environment;
+		DELETE FIELD InputExceptionList;
+		RETURN TRUE;
+	END;
+END MODULE;

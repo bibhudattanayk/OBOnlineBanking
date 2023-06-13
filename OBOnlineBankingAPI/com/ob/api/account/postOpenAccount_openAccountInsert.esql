@@ -1,0 +1,30 @@
+BROKER SCHEMA com.ob.api.account
+
+CREATE COMPUTE MODULE postOpenAccount_openAccountInsert
+	DECLARE OBDSN, OBSchema, OBTable EXTERNAL CHARACTER '';
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE envRef REFERENCE TO Environment.Variables;
+		DECLARE envMsgRef REFERENCE TO envRef.InputMsg;
+		DECLARE DBQuery CHARACTER;
+		SET DBQuery = 'SELECT * FROM '||OBSchema||'.'||OBTable||' WHERE CUST_NAME = ? AND CUST_M_NO = ? AND CUST_NATIONAL_ID = ?';
+		SET envRef.CustTable.records[] = PASSTHRU(DBQuery TO Database.{OBDSN} VALUES(envMsgRef.customerName,CAST(envMsgRef.customerMobile AS INTEGER),envMsgRef.customerNationalID));
+		IF EXISTS(envRef.CustTable.records[]) THEN
+			SET envRef.logMsg = 'Found duplicate record in System for given records (Customer Name:'||FIELDVALUE(envMsgRef.customerName)||',Mobile No:'||FIELDVALUE(envMsgRef.customerMobile)||',National ID:'||FIELDVALUE(envMsgRef.customerNationalID)||')';
+			PROPAGATE TO TERMINAL 'out1';
+			THROW USER EXCEPTION CATALOG 'OBCatalog' MESSAGE 14001 VALUES('unique: Found duplicate record in System for given records..!!') ;
+		ELSE
+			DECLARE accRefNoPattern,accMPin CHARACTER 'yyyyMMddHHmmssSSSSSS';
+			SET envRef.accRefNo = 'aref'||CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT accRefNoPattern);
+			SET accMPin = SUBSTRING(envMsgRef.customerName FROM 1 FOR 1)||SUBSTRING(envMsgRef.customerMobile FROM 7 FOR 3)||'#'||SUBSTRING(envMsgRef.customerDOB FROM 8 FOR 3);
+			INSERT INTO Database.{OBDSN}.{OBSchema}.{OBTable}(CUST_NAME,CUST_DOB,CUST_F_NAME,CUST_M_NO,CUST_EMAIL_ID,CUST_NATIONAL_ID,CUST_HOUSE_NO,CUST_STREET,CUST_LANDMARK,CUST_CITY,CUST_STATE,
+			CUST_COUNTRY,CUST_PIN,CUST_ACC_REF_NO,CUST_ACC_REF_STS,CUST_ACC_STS,CUST_ACC_TYP,CUST_M_PIN,CUST_LST_UPDT_DT)
+			VALUES (envMsgRef.customerName,envMsgRef.customerDOB,envMsgRef.customerFatherName,CAST(envMsgRef.customerMobile AS INTEGER),envMsgRef.customerEmailID,envMsgRef.customerNationalID,envMsgRef.customerAddress.houseNo,
+			envMsgRef.customerAddress.street,envMsgRef.customerAddress.landmark,envMsgRef.customerAddress.city,envMsgRef.customerAddress.state,envMsgRef.customerAddress.country,envMsgRef.customerAddress.pin,
+			envRef.accRefNo,'VALID','INACTIVE',envMsgRef.custAccountType,accMPin,CURRENT_TIMESTAMP);
+			SET envRef.logMsg = 'Data inserted successfully..!!';
+			PROPAGATE TO TERMINAL 'out1';		
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;
